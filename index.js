@@ -17,6 +17,10 @@ mongoose
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+const userRoutes = require('./routes/user');
+
+app.use('/api/user', userRoutes);
+
 app.listen(process.env.PORT || 4000, () => {
     console.log(`API is now online on port ${ process.env.PORT || 4000 }`)
 });
