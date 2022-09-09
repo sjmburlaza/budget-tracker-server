@@ -1,25 +1,26 @@
 const jwt = require('jsonwebtoken');
 
+
 module.exports.createAccessToken = (user) => {
 	const data = {
 		id: user._id,
-		email: user.email
+		email: user.email,
 	}
 
 	return jwt.sign(data, process.env.SECRET, {});
 }
 
 module.exports.verify = (req, res, next) => {
-	let token = req.headers.authorization;
+	let token = req.headers.token;
 
 	if (typeof token !== 'undefined') {
-		token = token.slice(7, token.length)
+		token = token.slice(7, token.length);
 
 		return jwt.verify(token, process.env.SECRET, (err, data) => {
-			return (err) ? res.send({ auth: 'failedx' }) : next();
+			return (err) ? res.send({ auth: 'failedzz' }) : next();
 		})
 	} else {
-		return res.send({ auth: 'failedy' });
+		return res.send({ auth: 'failedxx' });
 	}
 }
 

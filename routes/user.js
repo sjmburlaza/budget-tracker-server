@@ -18,7 +18,7 @@ router.post('/login', (req, res) => {
 })
 
 router.get('/details', auth.verify, (req, res) => {
-	const user = auth.decode(req.headers.authorization)
+	const user = auth.decode(req.headers.token);
     UserController.get({ userId: user.id }).then(user => res.send(user))
 })
 
@@ -26,7 +26,7 @@ router.post('/add-category', auth.verify, (req, res) => {
 	const params = {
 			name: req.body.name,
 			type: req.body.type,
-			userId: auth.decode(req.headers.authorization).id
+			userId: auth.decode(req.headers.token).id
 		}
 
     UserController.addCategory(params).then(user => res.send(user))
@@ -38,8 +38,8 @@ router.post('/add-record', auth.verify, (req, res) => {
 			type: req.body.type,
 			amount: req.body.amount,
 			description: req.body.description,
-			userId: auth.decode(req.headers.authorization).id
-		}
+			userId: auth.decode(req.headers.token).id
+		};
 
     UserController.addRecord(params).then(user => res.send(user))
 })
