@@ -108,7 +108,8 @@ module.exports.addRecord = (params) => {
 			name: params.name,
 			type: params.type,
 			amount: params.amount,
-			description: params.description
+			description: params.description,
+			balance: params.balance
 		})
 		return user.save().then((user, err) => {
 			return (err) ? false : true;

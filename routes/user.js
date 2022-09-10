@@ -38,6 +38,7 @@ router.post('/add-record', auth.verify, (req, res) => {
 			type: req.body.type,
 			amount: req.body.amount,
 			description: req.body.description,
+			balance: req.body.balance,
 			userId: auth.decode(req.headers.token).id
 		};
 

@@ -63,7 +63,7 @@ const UserSchema = new mongoose.Schema({
             },
             balance: {
                 type: Number,
-                // required: [true, 'Amount is required.']
+                required: [true, 'Amount is required.']
             }
         }
     ]
