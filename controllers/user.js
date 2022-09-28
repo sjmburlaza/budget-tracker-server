@@ -3,12 +3,14 @@ const { OAuth2Client } = require('google-auth-library');
 const User = require('../models/User');
 const auth = require('../auth');
 
+// CHECK IF REGISTERED EMAIL ALREADY EXISTS
 module.exports.emailExists = (params) => {
 	return User.find({ email: params.email }).then(result => {
 		return result.length > 0 ? true : false;
 	})
 };
 
+// USER REGISTRATION
 module.exports.register = (params) => {
 	let user = new User({
 		firstName: params.firstName,
@@ -23,6 +25,7 @@ module.exports.register = (params) => {
 	})
 };
 
+// USER LOGIN
 module.exports.login = (params) => {
 	return User.findOne({ email: params.email }).then(user => {
 		if (user === null) {
@@ -42,6 +45,7 @@ module.exports.login = (params) => {
 	})
 };
 
+// GET USER'S DETAILS
 module.exports.get = (params) => {
 	return User.findById(params.userId).then(user => {
 		user.password = undefined;
@@ -49,6 +53,7 @@ module.exports.get = (params) => {
 	})
 };
 
+// FOR GOOGLE LOGIN
 module.exports.verifyGoogleTokenId = async (tokenId) => {
 	const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 	const data = await client.verifyIdToken({
@@ -87,6 +92,7 @@ module.exports.verifyGoogleTokenId = async (tokenId) => {
 	}
 };
 
+// FOR ADDING NEW CATEGORY
 module.exports.addCategory = (params) => {
 	return User.findById(params.userId).then(user => {
 		console.log(user)
@@ -101,6 +107,7 @@ module.exports.addCategory = (params) => {
 	
 };
 
+// FOR ADDING NEW RECORD
 module.exports.addRecord = (params) => {
 	return User.findById(params.userId).then(user => {
 
@@ -115,4 +122,18 @@ module.exports.addRecord = (params) => {
 			return (err) ? false : true;
 		})
 	})	
+};
+
+// SOFT DELETE OF CATEGORY
+module.exports.deleteCategory = (params) => {
+	return User.findByIdAndUpdate(params.userId).then(user => {
+		user.categories.map(c => {
+			if (c.name === params.name && c.type === params.type) {
+				return c.isDeleted = true;
+			}
+		})
+		return user.save().then((user, err) => {
+			return (err) ? false : true;
+		})
+	})
 };

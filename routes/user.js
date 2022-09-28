@@ -32,6 +32,15 @@ router.post('/add-category', auth.verify, (req, res) => {
     UserController.addCategory(params).then(user => res.send(user))
 })
 
+router.put('/delete-category', auth.verify, (req, res) => {
+	const params = {
+		name: req.body.name,
+		type: req.body.type,
+		userId: auth.decode(req.headers.token).id
+	}
+	UserController.deleteCategory(params).then(user => res.send(user))
+})
+
 router.post('/add-record', auth.verify, (req, res) => {
 	const params = {
 			name: req.body.name,

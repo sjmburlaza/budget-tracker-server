@@ -35,6 +35,11 @@ const UserSchema = new mongoose.Schema({
                 type: Date,
                 default: Date.now(),
                 required: 'Please enter the date this transaction took place.'
+            },
+            isDeleted: {
+                type: Boolean,
+                default: false,
+                required: [true, 'Is this deleted?']
             }
         }
     ],
@@ -64,6 +69,11 @@ const UserSchema = new mongoose.Schema({
             balance: {
                 type: Number,
                 required: [true, 'Amount is required.']
+            },
+            isDeleted: {
+                type: Boolean,
+                default: false,
+                required: [true, 'Is this deleted?']
             }
         }
     ]
