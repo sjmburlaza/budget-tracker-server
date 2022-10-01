@@ -95,7 +95,6 @@ module.exports.verifyGoogleTokenId = async (tokenId) => {
 // FOR ADDING NEW CATEGORY
 module.exports.addCategory = (params) => {
 	return User.findById(params.userId).then(user => {
-		console.log(user)
 		user.categories.push({
 			name: params.name,
 			type: params.type
@@ -107,16 +106,38 @@ module.exports.addCategory = (params) => {
 	
 };
 
+// FOR UPDATE OF CATEGORY
+module.exports.updateCategory = (params) => {
+	return User.updateOne(
+		{
+			_id: params.userId,
+			"categories._id": params.categoryId,
+			"records.categoryId": params.categoryId,
+		},
+		{
+			$set: {
+				"categories.$.name": params.name,
+				"categories.$.type": params.type,
+				"records.$.categoryName": params.name,
+				"records.$.categoryType": params.type,
+			}
+		}
+	)
+	.then((user, err) => {
+		return err ? false : true;
+	});
+}
+
 // FOR ADDING NEW RECORD
 module.exports.addRecord = (params) => {
+	console.log(params)
 	return User.findById(params.userId).then(user => {
-
 		user.records.push({
-			name: params.name,
-			type: params.type,
+			categoryName: params.categoryName,
+			categoryType: params.categoryType,
+			categoryId: params.categoryId,
 			amount: params.amount,
 			description: params.description,
-			balance: params.balance
 		})
 		return user.save().then((user, err) => {
 			return (err) ? false : true;
@@ -124,16 +145,25 @@ module.exports.addRecord = (params) => {
 	})	
 };
 
-// SOFT DELETE OF CATEGORY
-module.exports.deleteCategory = (params) => {
-	return User.findByIdAndUpdate(params.userId).then(user => {
-		user.categories.map(c => {
-			if (c.name === params.name && c.type === params.type) {
-				return c.isDeleted = true;
+// UPDATE OF RECORD
+module.exports.updateRecord = (params) => {
+	console.log(params)
+	return User.updateOne(
+		{
+			_id: params.userId,
+			"records._id": params.recordId
+		},
+		{
+			$set: {
+				"records.$.categoryName": params.categoryName,
+				"records.$.categoryType": params.categoryType,
+				"records.$.categoryId": params.categoryId,
+				"records.$.description": params.description,
+				"records.$.amount": params.amount,
 			}
-		})
-		return user.save().then((user, err) => {
-			return (err) ? false : true;
-		})
-	})
-};
+		}
+	)
+	.then((user, err) => {
+		return err ? false : true;
+	});
+}

@@ -36,23 +36,22 @@ const UserSchema = new mongoose.Schema({
                 default: Date.now(),
                 required: 'Please enter the date this transaction took place.'
             },
-            isDeleted: {
-                type: Boolean,
-                default: false,
-                required: [true, 'Is this deleted?']
-            }
         }
     ],
     records: [
         {
-            name: {
+            categoryName: {
                 type: String,
                 required: [true, 'Category name is required.']
             },
-            type: {
+            categoryType: {
                 type: String,
                 required: [true, 'Category type is required.']
-            },            
+            },
+            categoryId: {
+                type: String,
+                required: [true, 'Category ID is required.']
+            },
             description: {
                 type: String,
                 required: [true, 'Description is required.']
@@ -63,10 +62,6 @@ const UserSchema = new mongoose.Schema({
                 required: 'Please enter the date this transaction took place.'
             },
             amount: {
-                type: Number,
-                required: [true, 'Amount is required.']
-            },
-            balance: {
                 type: Number,
                 required: [true, 'Amount is required.']
             },
