@@ -39,7 +39,7 @@ router.put('/update-category', auth.verify, (req, res) => {
 		categoryId: req.body._id,
 		userId: auth.decode(req.headers.token).id
 	}
-	UserController.updateCategory(params).then(user => res.send(user))
+	UserController.updateCategory(params).then(user => res.send(user));
 })
 
 router.post('/add-record', auth.verify, (req, res) => {
@@ -55,17 +55,27 @@ router.post('/add-record', auth.verify, (req, res) => {
     UserController.addRecord(params).then(user => res.send(user))
 })
 
-router.post('/update-record', auth.verify, (req, res) => {
+router.put('/update-record', auth.verify, (req, res) => {
 	const params = {
 		categoryName: req.body.categoryName,
 		categoryType: req.body.categoryType,
 		categoryId: req.body.categoryId,
 		amount: req.body.amount,
 		description: req.body.description,
+		recordId: req.body._id,
 		userId: auth.decode(req.headers.token).id
 	};
 
     UserController.updateRecord(params).then(user => res.send(user))
+})
+
+router.put('/delete-record', auth.verify, (req, res) => {
+	const params = {
+		recordId: req.body._id,
+		userId: auth.decode(req.headers.token).id
+	};
+
+    UserController.deleteRecord(params).then(user => res.send(user))
 })
 
 

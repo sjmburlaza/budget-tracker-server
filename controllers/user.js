@@ -61,8 +61,6 @@ module.exports.verifyGoogleTokenId = async (tokenId) => {
 		audience: process.env.GOOGLE_CLIENT_ID
 	});
 
-	console.log(data.payload.email_verified);
-
 	if(data.payload.email_verified === true){
 		const user = await User.findOne({ email: data.payload.email });
 
@@ -108,6 +106,27 @@ module.exports.addCategory = (params) => {
 
 // FOR UPDATE OF CATEGORY
 module.exports.updateCategory = (params) => {
+	console.log(params)
+	return User.updateOne(
+		{
+			_id: params.userId,
+			"categories._id": params.categoryId,
+		},
+		{
+			$set: {
+				"categories.$.name": params.name,
+				"categories.$.type": params.type,
+			}
+		}
+	)
+	.then((user, err) => {
+		return err ? false : true;
+	});
+}
+
+// FOR UPDATE OF CATEGORY
+module.exports.updateRecordCategory = (params) => {
+	console.log(params)
 	return User.updateOne(
 		{
 			_id: params.userId,
@@ -130,7 +149,6 @@ module.exports.updateCategory = (params) => {
 
 // FOR ADDING NEW RECORD
 module.exports.addRecord = (params) => {
-	console.log(params)
 	return User.findById(params.userId).then(user => {
 		user.records.push({
 			categoryName: params.categoryName,
@@ -147,7 +165,6 @@ module.exports.addRecord = (params) => {
 
 // UPDATE OF RECORD
 module.exports.updateRecord = (params) => {
-	console.log(params)
 	return User.updateOne(
 		{
 			_id: params.userId,
@@ -158,8 +175,25 @@ module.exports.updateRecord = (params) => {
 				"records.$.categoryName": params.categoryName,
 				"records.$.categoryType": params.categoryType,
 				"records.$.categoryId": params.categoryId,
-				"records.$.description": params.description,
 				"records.$.amount": params.amount,
+				"records.$.description": params.description,
+			}
+		}
+	)
+	.then((user, err) => {
+		return err ? false : true;
+	});
+}
+
+module.exports.deleteRecord = (params) => {
+	return User.updateOne(
+		{
+			_id: params.userId,
+			"records._id": params.recordId
+		},
+		{
+			$set: {
+				"records.$.isDeleted": true,
 			}
 		}
 	)
